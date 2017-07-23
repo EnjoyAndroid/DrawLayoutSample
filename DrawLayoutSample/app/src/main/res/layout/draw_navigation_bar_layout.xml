@@ -1,0 +1,285 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="312px"
+            android:scrollbars="none"
+            android:fillViewport="true"
+            android:layout_height="match_parent">
+    <LinearLayout
+                  android:layout_width="312px"
+                  android:layout_height="match_parent"
+                  android:background="#212329"
+                  android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/allIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           android:src="@drawable/all_normal"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/smile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/smileIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           android:src="@drawable/smile_normal"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/jewelry"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/jewelryIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           android:src="@drawable/jewelry_normal"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/hot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/hotIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           android:src="@drawable/hot_normal"
+                          />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                         />
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                         />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                         />
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           />
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                          />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                          />
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                          />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/line"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/lineIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rect"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/rectIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:background="@drawable/border_shape_white"
+                           android:scaleType="fitXY" android:layout_centerVertical="true"
+                           android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1px"
+              android:background="#11161d"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/xuxian"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/xuxianIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"
+                           />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:visibility="invisible"
+                android:id="@+id/empty"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView android:id="@+id/emptyIcon"
+                           android:layout_width="100px"
+                           android:layout_height="100px"
+                           android:background="@drawable/border_shape_white"
+                           android:layout_centerInParent="true"
+                           android:scaleType="fitXY"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
