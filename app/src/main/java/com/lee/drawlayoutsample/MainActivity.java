@@ -138,7 +138,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.draw_layout);
+        setContentView(R.layout.activity_main);
         mOriginator = new MementoOriginator();
         mCreataker = new MementoCreataker();
 
