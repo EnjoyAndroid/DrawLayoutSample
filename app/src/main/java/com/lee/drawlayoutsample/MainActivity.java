@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -56,21 +55,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView dieluokaiguan;
     private ImageView bisuokaiguan;
     private ImageView huanwanggui;
-    private ImageView fenzhixiang;
-    private ImageView duanluqi;
-    private ImageView fuhekaiguan;
-    private ImageView gelikaiguan;
-    private ImageView bianyaqi;
-    private ImageView xiangbian;
-    private ImageView dianlan;
-    private ImageView dianlantou;
+
     private ImageView jiakongxian;
     private ImageView rect;
     private ImageView xuxian;
-    private int mFoucsImageId = 0;
     private Set<View> mViewList = new HashSet<View>();
     private Set<View> mFocusViewList = new HashSet<View>();
-    //private DrawCanvasView mDrawCanvasView;
     private long downTime = 0;
     private float downX = 0f;
     private float downY = 0f;
@@ -89,16 +79,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private int mStatusBarHeight = 0;
     private FrameLayout mRootView;
     private ImageView mCurrentImageView;
-    private float rotateDegree = 0f;
 
     private Bitmap mLineBitmap;
     private Bitmap mLineBitmapBlack;
     private Bitmap mLineBitmapGreen;
     private Bitmap mLineBitmapRed;
     private Bitmap mDashLineBitmap;
-    private Bitmap mDashLineBitmapBlack;
-    private Bitmap mDashLineBitmapGreen;
-    private Bitmap mDashLineBitmapRed;
+
 
     private List<ViewInfo> mInfoList = new ArrayList<ViewInfo>();
     private FrameLayout mContent;
@@ -120,7 +107,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private static final int MARGER_TOP = 107;
     private static final int PADDING = 20;
     private int mDeviceId = -1;
-    private InputMethodManager mInputMethodManager;
+
     private int mCurrentColor; // 0--黑色，1--绿色，2--红色
     private MementoCreataker mCreataker;
     private MementoOriginator mOriginator;
@@ -130,7 +117,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private int mRealInfoId = 5000;
     private float mStartX;
     private float mStartY;
-    private float mRotation;
     private static final int STROKE_WIDTH = 5;
 
 
@@ -151,27 +137,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
         radioGroup.setOnCheckedChangeListener(this);
-
-//        mMyScrollView = (MyScrollView)findViewById(R.id.scrollView);
-//        mMyHorizontalScrollView = (MyHorizontalScrollView)findViewById(R.id.hscrollView);
         mContentLayoutParams = (FrameLayout.LayoutParams) mContent.getLayoutParams();
         mContentLayoutParams.width = mDisplayMetrics.widthPixels - 312;
         mContentLayoutParams.height = mDisplayMetrics.heightPixels - mStatusBarHeight - 107;
 
-//        FrameLayout.LayoutParams editeTextParams =  new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-//        mContent.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                return false;
-//            }
-//        });
-//        mRootView.setOnTouchListener(new View.OnTouchListener(){
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return true;
-//            }
-//        });
         mContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -263,8 +232,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                                 mContent.addView(editText, layoutParams);
                                 createMemento(editText, false, true);
-                                if (mDeviceId == -1)
-                                    mInputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+
                             }
 
                         }
@@ -275,7 +243,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 return false;
             }
         });
-        //mDrawCanvasView = (DrawCanvasView)findViewById(R.id.canvas_view);
+
         mScaleGestureDetector = new ScaleGestureDetector(this, mScaleGestureListener);
         muxianjiange = (ImageView) findViewById(R.id.allIcon);
         muxianjiange.setOnTouchListener(mTouchListener);
@@ -337,7 +305,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     editText.setX(viewInfo.x);
                     editText.setY(viewInfo.y);
                     editText.setText(text);
-//                editText.setOnTouchListener(new EditTextTouchListener(editText));
+
                     mViewList.add(editText);
                     mContent.addView(editText, mDefaultEditTextParams);
 
@@ -356,11 +324,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     setImageResource(imageView, false);
                     if (newViewInfo.degree != 0) {
                         imageView.setRotation(viewInfo.degree);
-//                        imageView.setRotation(viewInfo.degree);
-//                        Bitmap bitmap = getRotateBitmap(imageView, false, false);
-//                        if (bitmap != null) {
-//                            imageView.setImageBitmap(bitmap);
-//                        }
                     }
                     mViewList.add(imageView);
                     mContent.addView(imageView, mContentLayoutParams);
@@ -381,7 +344,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mRootView.removeAllViews();
 
         recycle(mLineBitmap, mLineBitmapBlack, mLineBitmapGreen, mLineBitmapRed
-                , mDashLineBitmap, mDashLineBitmapBlack, mDashLineBitmapGreen, mDashLineBitmapRed);
+                , mDashLineBitmap);
     }
 
     private void recycle(Bitmap... bitmaps) {
@@ -432,7 +395,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     canvas.drawLine(0, 50, 100, 50, paint);
 
                     mLineBitmap = mLineBitmapBlack;
-//TODO 线条颜色有点小bug
+
                     if (viewInfo.color == 2) {
                         mLineBitmap = mLineBitmapRed;
                     } else if (mCurrentColor == 1) {
@@ -605,10 +568,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     view.setRotation(degree);
                     LogUtils.d("end x: " + view.getX() + ", y :" + view.getY());
                     createMemento(view, false, false);
-//                    Bitmap bitmap = getRotateBitmap((ImageView) view, false);
-//                    if (bitmap != null) {
-//                        ((ImageView) view).setImageBitmap(bitmap);
-//                    }
+
                 }
                 break;
             case R.id.clear:
@@ -652,7 +612,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.done:
 
-                Intent intent = new Intent();
+
                 Bitmap bitmap = captureScreen();
                 FileOutputStream outputStream = null;
                 if (bitmap != null) {
@@ -1101,17 +1061,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.rb_black:
                 mCurrentColor = 0;
                 mLineBitmap = mLineBitmapBlack;
-                mDashLineBitmap = mDashLineBitmapBlack;
+
                 break;
             case R.id.rb_green:
                 mCurrentColor = 1;
                 mLineBitmap = mLineBitmapGreen;
-                mDashLineBitmap = mDashLineBitmapGreen;
+
                 break;
             case R.id.rb_red:
                 mCurrentColor = 2;
                 mLineBitmap = mLineBitmapRed;
-                mDashLineBitmap = mDashLineBitmapRed;
+
                 break;
             default:
                 LogUtils.e("default checkedId: " + checkedId, new IllegalArgumentException());
@@ -1128,10 +1088,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    class MyTouchListener implements View.OnTouchListener {
+    private class MyTouchListener implements View.OnTouchListener {
         private ImageView imageView;
 
-        public MyTouchListener(ImageView imageView) {
+        MyTouchListener(ImageView imageView) {
             this.imageView = imageView;
         }
 
@@ -1464,86 +1424,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    class EditTextTouchListener implements View.OnTouchListener {
-
-        private EditText mEditText;
-
-        public EditTextTouchListener(EditText editText) {
-            this.mEditText = editText;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            int action = event.getAction();
-            ViewInfo viewInfo = (ViewInfo) v.getTag();
-
-//            float downX1 = 0;
-//            float downY1 = 0;
-            int imageW = 0;
-            int imageH = 0;
-
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                    downTime = System.currentTimeMillis();
-                    downX = mEditText.getX();
-                    downY = mEditText.getY();
-
-                    LogUtils.d("ACTION_DOWN " + (int) downX + "," + (int) downY);
-                    return true;
-                case MotionEvent.ACTION_MOVE:
-                    float disX = event.getX();
-                    float disY = event.getY();
-                    LogUtils.i("disX : " + (int) disX + ", disY : " + (int) disY);
-
-                    if (mFocusViewList.contains(mEditText)) {
-                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mEditText.getLayoutParams();
-                        params.width = imageW + (int) disX;
-                        params.height = imageH + (int) disY;
-                        mEditText.requestLayout();
-                    } else { //处理图标拖动
-                        mEditText.setX(mEditText.getX() + disX);
-                        mEditText.setY(mEditText.getY() + disY);
-                        LogUtils.d("ACTION_MOVE " + (int) downX + "," + (int) downY);
-                    }
-                    return true;
-                case MotionEvent.ACTION_UP:
-                    float x = mEditText.getX();
-                    float y = mEditText.getY();
-                    long time = System.currentTimeMillis() - downTime;
-                    LogUtils.d("ACTION_UP " + (int) x + "," + (int) y + " ### disTime: " + time);
-                    if (time <= 200 && Math.abs(x - downX) < 50 && Math.abs(y - downY) < 50) {
-                        mEditText.requestFocus();
-                        if (mDeviceId == -1)
-                            mInputMethodManager.showSoftInput(mEditText, InputMethodManager.SHOW_IMPLICIT);
-                        LogUtils.d("聚焦");
-                    } else {
-                        mEditText.clearFocus();
-                        LogUtils.d("清除焦点");
-                    }
-                    if (x < 0) {
-                        x = 0;
-                        mEditText.setX(x);
-                    } else if (x > (mDisplayMetrics.widthPixels - 312 - 100)) {
-                        x = mDisplayMetrics.widthPixels - 100 - 312;
-                        mEditText.setX(x);
-                    }
-
-                    if (y <= 0) {
-                        y = 0;
-                        mEditText.setY(y);
-                    } else if (y > mDisplayMetrics.heightPixels - 100 - mStatusBarHeight - 107) {
-                        y = mDisplayMetrics.heightPixels - 100 - mStatusBarHeight - 107;
-                        mEditText.setY(y);
-                    }
-                    if (mRectList != null) {
-                        mRectList.clear();
-                    }
-                    return true;
-            }
-
-            return false;
-        }
-    }
 
     private void getLineCoordinate() {
         mLefts.clear();
@@ -1637,20 +1517,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return resultBmp;
     }
 
-//    class ViewInfo {
-//        public ViewInfo(int id, float degree) {
-//            this.id = id;
-//            this.degree = degree;
-//        }
-//
-//        public int id;
-//        public float degree;
-//        public int width;
-//        public int height;
-//        public int x;
-//        public int y;
-//
-//    }
 
     private boolean inRange(Rect srcRect, Rect checkRect) {
         return srcRect.contains(checkRect);
