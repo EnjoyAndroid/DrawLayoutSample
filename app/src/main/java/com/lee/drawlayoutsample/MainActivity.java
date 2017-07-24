@@ -654,11 +654,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 return false;
             }
 
-            float targetX = 0;
-            float targetY = 0;
-            float targetRight = 0;
-            float targetBottom = 0;
-
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
                     fdownX = event.getX();
@@ -680,118 +675,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     imageW = mCurrentImageView.getWidth();
                     imageH = mCurrentImageView.getHeight();
 
-                    targetX = mCurrentImageView.getX() - MARGER_LEFT;
-                    targetY = mCurrentImageView.getY() - MARGER_TOP;
-                    targetRight = targetX + imageW;
-                    targetBottom = targetY + imageH;
-//                    Log.d(TAG, "ACTION_MOVE " + (int) targetX + "," + (int) targetY + "," + (int) targetRight + "," + (int) targetBottom);
                     mCurrentImageView.setBackgroundResource(android.R.color.transparent);
                     setImageResource(mCurrentImageView, true);
 
-                    for (int i = 0; i < mTops.size(); i++) {
-                        float consultTop = mTops.get(i);
-                        View line = mLines.get(i);
-                        ViewInfo lineInfo = (ViewInfo) line.getTag();
-                        if ((lineInfo.degree == 90 || lineInfo.degree == 270) && Math.abs(consultTop - targetBottom) <= LIMIT) { //在竖线上面
-                            int lineMiddleX = (2 * mRights.get(i) - line.getHeight()) / 2;//获取到线条的y/2
-                            if (disX >= 0) { //从左往右
-                                if (Math.abs(mLefts.get(i) - targetRight) <= OFFSET) {
-                                    mCurrentImageView.setX(lineMiddleX - imageW / 2 + MARGER_LEFT);
-                                    mCurrentImageView.setY(consultTop - imageH + MARGER_TOP + PADDING);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.d(TAG, "竖线上边匹配成功 从左往右 targetBottom : " + targetBottom + ", consultTop: " + consultTop);
-                                }
-                            } else {
-                                if (Math.abs(targetX - mRights.get(i)) <= OFFSET) {
-                                    mCurrentImageView.setX(lineMiddleX - imageW / 2 + MARGER_LEFT);
-                                    mCurrentImageView.setY(consultTop - imageH + MARGER_TOP + PADDING);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.d(TAG, "竖线上边匹配成功 从右往左 targetBottom : " + targetBottom + ", consultTop: " + consultTop);
-                                }
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < mBottoms.size(); i++) {
-                        float consultBottom = mBottoms.get(i);
-                        View line = mLines.get(i);
-                        ViewInfo lineInfo = (ViewInfo) line.getTag();
-                        if ((lineInfo.degree == 90 || lineInfo.degree == 270) && Math.abs(targetY - consultBottom) <= LIMIT) {
-                            int lineMiddleX = (2 * mRights.get(i) - line.getHeight()) / 2;//获取到线条的y/2
-
-                            if (disX >= 0) { //从左往右
-                                if (Math.abs(mLefts.get(i) - targetRight) <= OFFSET) {
-                                    mCurrentImageView.setX(lineMiddleX - imageW / 2 + MARGER_LEFT);
-                                    mCurrentImageView.setY(consultBottom + MARGER_TOP - PADDING);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.i(TAG, "竖线下边匹配成功 从左往右 targetY : " + targetY + ", consultBottom : " + consultBottom);
-                                }
-                            } else {
-                                if (Math.abs(targetX - mRights.get(i)) <= OFFSET) {
-                                    mCurrentImageView.setX(lineMiddleX - imageW / 2 + MARGER_LEFT);
-                                    mCurrentImageView.setY(consultBottom + MARGER_TOP - PADDING);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.i(TAG, "竖线下边匹配成功 从右往左 targetY : " + targetY + ", consultBottom : " + consultBottom);
-                                }
-
-                            }
-
-                        }
-                    }
-
-                    for (int i = 0; i < mLefts.size(); i++) {
-                        float consultLeft = mLefts.get(i);
-                        View line = mLines.get(i);
-                        ViewInfo lineInfo = (ViewInfo) line.getTag();
-                        if ((lineInfo.degree == 0 || lineInfo.degree == 180) && Math.abs(consultLeft - targetRight) <= LIMIT) {
-                            int lineMiddleY = (2 * mBottoms.get(i) - line.getHeight()) / 2;//获取到线条的y/2
-                            int newY = lineMiddleY - imageH / 2;
-                            Log.d(TAG, "lineMiddleY : " + lineMiddleY + ", newY: " + newY);
-
-                            if (disY >= 0) { //从上到下
-                                if (Math.abs(mTops.get(i) - targetBottom) <= OFFSET) {
-                                    mCurrentImageView.setX(consultLeft - imageW + MARGER_LEFT + PADDING);
-                                    mCurrentImageView.setY(newY + MARGER_TOP);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.d(TAG, "横线左边匹配成功 从上往下 targetRight : " + targetRight + " , consultLeft: " + consultLeft);
-                                }
-                            } else {
-                                if (Math.abs(targetY - mBottoms.get(i)) <= OFFSET) {
-                                    mCurrentImageView.setX(consultLeft - imageW + MARGER_LEFT + PADDING);
-                                    mCurrentImageView.setY(newY + MARGER_TOP);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.d(TAG, "横线左边匹配成功 从下往上 targetRight : " + targetRight + " , consultLeft: " + consultLeft);
-                                }
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < mRights.size(); i++) {
-                        float consultRight = mRights.get(i);
-                        View line = mLines.get(i);
-                        ViewInfo lineInfo = (ViewInfo) line.getTag();
-                        if ((lineInfo.degree == 0 || lineInfo.degree == 180) && targetX - consultRight > 0 && targetX - consultRight <= LIMIT) {
-                            int lineMiddleY = (2 * mBottoms.get(i) - line.getHeight()) / 2;//获取到线条的y/2
-                            int newY = lineMiddleY - imageH / 2;
-                            Log.d(TAG, "lineMiddleY : " + lineMiddleY + ", newY: " + newY);
-                            if (disY >= 0) { //从上往下
-                                if (Math.abs(mTops.get(i) - targetBottom) <= OFFSET) {
-                                    mCurrentImageView.setX(consultRight + MARGER_LEFT - PADDING);
-                                    mCurrentImageView.setY(newY + MARGER_TOP);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.d(TAG, "横线右边匹配成功 从上往下 targetX : " + targetX + " , consultRight: " + consultRight);
-                                }
-                            } else {
-                                if (Math.abs(targetY - mBottoms.get(i)) <= OFFSET) {
-                                    mCurrentImageView.setX(consultRight + MARGER_LEFT - PADDING);
-                                    mCurrentImageView.setY(newY + MARGER_TOP);
-                                    mCurrentImageView.setBackgroundResource(R.drawable.border_shape_green);
-                                    Log.d(TAG, "横线右边匹配成功 从下往上 targetX : " + targetX + " , consultRight: " + consultRight);
-                                }
-                            }
-                        }
-                    }
-//                    }
 
                     return true;
                 case MotionEvent.ACTION_UP:
