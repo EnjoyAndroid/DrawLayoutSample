@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -51,14 +49,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final int DEGREE_270 = 270;
     private ScaleGestureDetector mScaleGestureDetector;
     private ScaleGestureListener mScaleGestureListener = new ScaleGestureListener();
-    private ImageView muxianjiange;
-    private ImageView dieluokaiguan;
-    private ImageView bisuokaiguan;
-    private ImageView huanwanggui;
 
-    private ImageView jiakongxian;
-    private ImageView rect;
-    private ImageView xuxian;
     private Set<View> mViewList = new HashSet<View>();
     private Set<View> mFocusViewList = new HashSet<View>();
     private long downTime = 0;
@@ -84,7 +75,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Bitmap mLineBitmapBlack;
     private Bitmap mLineBitmapGreen;
     private Bitmap mLineBitmapRed;
-    private Bitmap mDashLineBitmap;
 
 
     private List<ViewInfo> mInfoList = new ArrayList<ViewInfo>();
@@ -106,7 +96,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private static final int MARGER_LEFT = 312;
     private static final int MARGER_TOP = 107;
     private static final int PADDING = 20;
-    private int mDeviceId = -1;
 
     private int mCurrentColor; // 0--黑色，1--绿色，2--红色
     private MementoCreataker mCreataker;
@@ -245,29 +234,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
 
         mScaleGestureDetector = new ScaleGestureDetector(this, mScaleGestureListener);
-        muxianjiange = (ImageView) findViewById(R.id.allIcon);
-        muxianjiange.setOnTouchListener(mTouchListener);
-        muxianjiange.setOnLongClickListener(mLongClickListener);
-        dieluokaiguan = (ImageView) findViewById(R.id.smileIcon);
-        dieluokaiguan.setOnTouchListener(mTouchListener);
-        dieluokaiguan.setOnLongClickListener(mLongClickListener);
-        bisuokaiguan = (ImageView) findViewById(R.id.jewelryIcon);
-        bisuokaiguan.setOnTouchListener(mTouchListener);
-        bisuokaiguan.setOnLongClickListener(mLongClickListener);
-        huanwanggui = (ImageView) findViewById(R.id.hotIcon);
-        huanwanggui.setOnTouchListener(mTouchListener);
-        huanwanggui.setOnLongClickListener(mLongClickListener);
+        ImageView allImageView = (ImageView) findViewById(R.id.allIcon);
+        allImageView.setOnTouchListener(mTouchListener);
+        allImageView.setOnLongClickListener(mLongClickListener);
+        ImageView smileImageView = (ImageView) findViewById(R.id.smileIcon);
+        smileImageView.setOnTouchListener(mTouchListener);
+        smileImageView.setOnLongClickListener(mLongClickListener);
+        ImageView jewelryImageView = (ImageView) findViewById(R.id.jewelryIcon);
+        jewelryImageView.setOnTouchListener(mTouchListener);
+        jewelryImageView.setOnLongClickListener(mLongClickListener);
+        ImageView hotImageView = (ImageView) findViewById(R.id.hotIcon);
+        hotImageView.setOnTouchListener(mTouchListener);
+        hotImageView.setOnLongClickListener(mLongClickListener);
 
-        jiakongxian = (ImageView) findViewById(R.id.lineIcon);
-        jiakongxian.setOnTouchListener(mTouchListener);
-        jiakongxian.setOnLongClickListener(mLongClickListener);
-        rect = (ImageView) findViewById(R.id.rectIcon);
+        ImageView lineImageView = (ImageView) findViewById(R.id.lineIcon);
+        lineImageView.setOnTouchListener(mTouchListener);
+        lineImageView.setOnLongClickListener(mLongClickListener);
+        ImageView rect = (ImageView) findViewById(R.id.rectIcon);
         rect.setOnTouchListener(mTouchListener);
         rect.setOnLongClickListener(mLongClickListener);
 
-        xuxian = (ImageView) findViewById(R.id.xuxianIcon);
-        xuxian.setOnTouchListener(mTouchListener);
-        xuxian.setOnLongClickListener(mLongClickListener);
+
         findViewById(R.id.clear).setOnClickListener(this);
         findViewById(R.id.rotate).setOnClickListener(this);
         findViewById(R.id.delete).setOnClickListener(this);
@@ -343,8 +330,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onDestroy();
         mRootView.removeAllViews();
 
-        recycle(mLineBitmap, mLineBitmapBlack, mLineBitmapGreen, mLineBitmapRed
-                , mDashLineBitmap);
+        recycle(mLineBitmap, mLineBitmapBlack, mLineBitmapGreen, mLineBitmapRed);
     }
 
     private void recycle(Bitmap... bitmaps) {
@@ -364,7 +350,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.smileIcon:
                 realSetImageResource(v, viewInfo, focus, R.drawable.smile_selected, R.drawable.ic_smile_black, R.drawable.ic_smile_green, R.drawable.ic_smile_red);
                 break;
-            case R.id.jewelry:
+            case R.id.jewelryIcon:
                 realSetImageResource(v, viewInfo, focus, R.drawable.jewelry_selected, R.drawable.ic_jewelry_black, R.drawable.ic_jewelry_green, R.drawable.ic_jewelry_red);
                 break;
             case R.id.hotIcon:
@@ -422,15 +408,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    private void setPainColor(Paint paint) {
-        paint.setColor(Color.BLACK);
-        if (mCurrentColor == 2) {
-            paint.setColor(Color.RED);
-        } else if (mCurrentColor == 1) {
-            paint.setColor(Color.GREEN);
-        }
-    }
-
     private void realSetImageResource(ImageView v, ViewInfo viewInfo, boolean focus, int focusId, int blackId, int greenId, int redId) {
         if (focus) {
             v.setImageResource(focusId);
@@ -445,86 +422,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    public Bitmap getRotateBitmap(ImageView v, boolean focus) {
-        return getRotateBitmap(v, focus, true);
-    }
-
-    public Bitmap getRotateBitmap(ImageView v, boolean focus, boolean addDegree) {
-        Bitmap bitmap = null;
-        ViewInfo viewInfo = (ViewInfo) v.getTag();
-        switch (viewInfo.id) {
-            case R.id.allIcon:
-                bitmap = realGetRotateBitmap(focus, R.drawable.all_selected, R.drawable.ic_all_black, R.drawable.ic_all_green, R.drawable.ic_all_red);
-                break;
-            case R.id.smileIcon:
-                bitmap = realGetRotateBitmap(focus, R.drawable.smile_selected, R.drawable.ic_smile_black, R.drawable.ic_smile_green, R.drawable.ic_smile_red);
-                break;
-            case R.id.jewelry:
-                bitmap = realGetRotateBitmap(focus, R.drawable.jewelry_selected, R.drawable.ic_jewelry_black, R.drawable.ic_jewelry_green, R.drawable.ic_jewelry_red);
-                break;
-            case R.id.hotIcon:
-                bitmap = realGetRotateBitmap(focus, R.drawable.hot_selected, R.drawable.ic_hot_black, R.drawable.ic_hot_green, R.drawable.ic_hot_red);
-                break;
-            case R.id.lineIcon:
-                if (focus) {
-                    bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.line_selected);
-                } else {
-//                    if (mLineBitmap == null) {
-//                        mLineBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-//                        Canvas canvas = new Canvas(mLineBitmap);
-//                        Paint paint = new Paint();
-//                        setPainColor(paint);
-//                        paint.setStrokeWidth(1);
-//                        canvas.drawLine(0, 50, 100, 50, paint);
-//                    }
-                    bitmap = mLineBitmap;
-                }
-                break;
-            case R.id.rectIcon:
-                bitmap = BitmapFactory.decodeResource(getResources(), focus ? R.drawable.border_shape_focus : R.drawable.border_shape);
-                break;
-            default:
-                break;
-        }
-
-        if (bitmap != null) {
-            Matrix matrix = new Matrix();
-            //  获取图片高度和宽度
-            int nBitmapWidth = bitmap.getWidth();
-            int nBitmapHeight = bitmap.getHeight();
-            matrix.reset();
-            if (addDegree) {
-                viewInfo.degree = viewInfo.degree + ((viewInfo.id == R.id.lineIcon && false) ? 45f : 90f);
-            }
-            matrix.setRotate(viewInfo.degree);
-            if (viewInfo.degree >= 360) {
-                viewInfo.degree = 0;
-            }
-            Bitmap bitmapDisplay = Bitmap.createBitmap(bitmap, 0, 0, nBitmapWidth, nBitmapHeight, matrix, true);
-//            if(bitmap != null) {
-//                bitmap.recycle();
-//            }
-            return bitmapDisplay;
-        }
-
-        return null;
-    }
-
-    private Bitmap realGetRotateBitmap(boolean focus, int foucsImageId, int blackId, int greenId, int redId) {
-        Bitmap bitmap;
-        if (focus) {
-            bitmap = getBitmap(foucsImageId);
-        } else {
-            if (mCurrentColor == 2) {
-                bitmap = getBitmap(redId);
-            } else if (mCurrentColor == 1) {
-                bitmap = getBitmap(greenId);
-            } else {
-                bitmap = getBitmap(blackId);
-            }
-        }
-        return bitmap;
-    }
 
     private Bitmap getBitmap(int drawableId) {
         Drawable drawable = ContextCompat.getDrawable(MainActivity.this, drawableId);
@@ -791,8 +688,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     mCurrentImageView.setBackgroundResource(android.R.color.transparent);
                     setImageResource(mCurrentImageView, true);
 
-//                    if (disX >= disY) {   //左右移动
-//                        Log.i(TAG, "左右移动");
                     for (int i = 0; i < mTops.size(); i++) {
                         float consultTop = mTops.get(i);
                         View line = mLines.get(i);
@@ -843,8 +738,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                         }
                     }
-//                    } else { //上下移动
-//                        Log.d(TAG, "上下移动");
+
                     for (int i = 0; i < mLefts.size(); i++) {
                         float consultLeft = mLefts.get(i);
                         View line = mLines.get(i);
@@ -945,7 +839,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     };
 
 
-    //TODO 多个View操作好像还有点小bug
+
     private void createMemento(View view, boolean isDelete, boolean isNewElement) {
 
         if (mInfoList == null) {
