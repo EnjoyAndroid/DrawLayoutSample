@@ -9,13 +9,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -93,8 +90,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private List<View> mLines = new ArrayList<View>();
     private static final int LIMIT = 50;
     private static final int OFFSET = 100;
-    private static final int MARGER_LEFT = 312;
-    private static final int MARGER_TOP = 107;
     private static final int PADDING = 20;
 
     private int mCurrentColor; // 0--黑色，1--绿色，2--红色
@@ -198,7 +193,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                             float y = event.getRawY();
                             Log.i(TAG, "x: " + x + "### y：" + y);
 
-                            if (x <= 312 || y <= 106) {
+                            if (x <= 312 || x >= 1920 || y <= 106 || y >= 1200) {
                                 Log.d(TAG, "不在画布区域内 x: " + x + "### y：" + y);
                                 return true;
                             } else {
@@ -213,7 +208,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                 viewInfo.x = editText.getX();
                                 viewInfo.y = editText.getY();
                                 editText.setTag(viewInfo);
-//                                editText.setOnTouchListener(new EditTextTouchListener(editText));
 
                                 Log.d(TAG, "editTextId : " + editText.getId());
                                 mViewList.add(editText);
@@ -423,17 +417,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    private Bitmap getBitmap(int drawableId) {
-        Drawable drawable = ContextCompat.getDrawable(MainActivity.this, drawableId);
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof VectorDrawable) {
-            return getBitmap((VectorDrawable) drawable);
-        } else {
-            throw new IllegalArgumentException("unsupported drawable type");
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private Bitmap getBitmap(VectorDrawable vectorDrawable) {
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
@@ -520,7 +503,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         e.printStackTrace();
                     } finally {
                         try {
-                            outputStream.close();
+                            if (outputStream != null) {
+                                outputStream.close();
+                            }
                         } catch (Exception e) {
                             Log.e(TAG, e.getMessage(), e);
                         }
@@ -678,7 +663,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     mCurrentImageView.setBackgroundResource(android.R.color.transparent);
                     setImageResource(mCurrentImageView, true);
 
-
                     return true;
                 case MotionEvent.ACTION_UP:
                     float x = mCurrentImageView.getX();
@@ -725,7 +709,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     };
 
 
-
     private void createMemento(View view, boolean isDelete, boolean isNewElement) {
 
         if (mInfoList == null) {
@@ -745,7 +728,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             viewInfo.y = viewInfo.y == 0 ? (int) view.getY() : viewInfo.y;
             mInfoList.add(viewInfo);
         } else { //改变现有元素
-
 //            LogUtils.d("改变现有元素");
             if (isDelete) {
 //                LogUtils.i("删除元素");
@@ -783,7 +765,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         infos.addAll(mInfoList);
         mOriginator.setInfos(infos);
         mCreataker.createMemento(mOriginator.createMemento(), mCurrentIndex);
-//        mOriginator.printMementos();
+
     }
 
     private void cancelMoveView(float x, float y) {
@@ -859,8 +841,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
         for (View view : mFocusViewList) {
             if (view instanceof ImageView) {
-//                ViewInfo viewInfo = (ViewInfo) view.getTag();
-//                viewInfo.color = mCurrentColor;
                 createMemento(view, false, false);
                 setImageResource((ImageView) view, false);
             }
@@ -906,13 +886,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     }
                     LogUtils.d("downX: " + downX + " , downY: " + downY);
                     downTime = System.currentTimeMillis();
-                    targetX = downImageX = imageView.getX();
-                    targetY = downImageY = imageView.getY();
+
                     imageW = imageView.getWidth();
                     imageH = imageView.getHeight();
-
-                    targetBottom = targetY + imageH;
-                    targetRight = targetY + imageW;
 
                     int[] location0 = new int[2];
                     imageView.getLocationOnScreen(location0);
@@ -924,19 +900,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     srcRect.top = y0;
                     srcRect.bottom = y0 + imageView.getHeight();
 
-//                    LogUtils.d("ACTION_DOWN " + (int) targetX + "," + (int) targetY + "," + (int) targetRight + "," + (int) targetBottom);
                     getLineCoordinate();
 
                     if (viewInfo.id == R.id.rectIcon) {
-//                        int[] location = new int[2];
-//                        mEditText.getLocationOnScreen(location);
-//                        int x = location[0];
-//                        int y = location[1];
-//                        Rect srcRect = new Rect();
-//                        srcRect.left = x;
-//                        srcRect.right = x + mEditText.getWidth();
-//                        srcRect.top = y;
-//                        srcRect.bottom = y + mEditText.getHeight();
                         mRectList = getNeedMoveView(srcRect, imageView);
                     }
                     return true;
@@ -962,17 +928,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                     if ((viewInfo.id == R.id.lineIcon || viewInfo.id == R.id.xuxianIcon) && mFocusViewList.contains(imageView)) {
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imageView.getLayoutParams();
-//                        if (viewInfo.degree == 0 || viewInfo.degree == 180) {
-//                            params.width = imageW + (int) disX;
-//                            params.height = imageH + (int) disY;
-//                        } else if (viewInfo.degree == 90 || viewInfo.degree == 270) {
-//                            params.width = imageW + (int) disX;
-//                            params.height = imageH + (int) disY;
-//                        } else {
-//                        }
                         params.width = imageW + (int) disX;
                         params.height = imageH + (int) disY;
-//                        mEditText.setImageBitmap(mLineBitmap);
                         imageView.requestLayout();
                     } else if (viewInfo.id == R.id.rectIcon && mFocusViewList.contains(imageView)) {
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imageView.getLayoutParams();
@@ -1002,9 +959,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                 params.height = imageH + (int) disY;
                                 imageView.requestLayout();
                             } else { //处理图标拖动
-                                float x = imageView.getX();
-                                float y = imageView.getY();
-//                                LogUtils.d("x: " + x + ", y: " + y);
+
                                 imageView.setX(imageView.getX() + disX - OFFSET);
                                 imageView.setY(imageView.getY() + disY - OFFSET);
                                 imageView.setBackgroundResource(android.R.color.transparent);
@@ -1015,8 +970,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                 targetBottom = targetY + imageH;
 //                                LogUtils.d("ACTION_MOVE " + (int) targetX + "," + (int) targetY + "," + (int) targetRight + "," + (int) targetBottom);
 
-//                                if (disX >= disY) {   //左右移动
-//                                    Log.i(TAG, "左右移动");
                                 for (int i = 0; i < mTops.size(); i++) {
                                     float consultTop = mTops.get(i);
                                     View line = mLines.get(i);
@@ -1064,8 +1017,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                         }
                                     }
                                 }
-//                                } else { //上下移动
-//                                    Log.d(TAG, "上下移动");
+
                                 for (int i = 0; i < mLefts.size(); i++) {
                                     float consultLeft = mLefts.get(i);
                                     View line = mLines.get(i);
@@ -1117,7 +1069,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                                     }
                                 }
-//                                }
+
                             }
                         }
                     }
@@ -1204,7 +1156,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-
     private void getLineCoordinate() {
         mLefts.clear();
         mTops.clear();
@@ -1215,27 +1166,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             ViewInfo viewInfo = (ViewInfo) view.getTag();
             if (R.id.lineIcon == viewInfo.id || R.id.xuxianIcon == viewInfo.id) {
                 mLines.add(view);
-//                int[] location = new int[2];
-//                view.getLocationOnScreen(location);
-//                float x = location[0];
-//                float y = location[1];
+
                 int x = (int) view.getX();
                 int y = (int) view.getY();
                 int bottom = y + view.getHeight();
                 int right = x + view.getWidth();
-                if (viewInfo.degree == 0 || viewInfo.degree == 180) {
-//                    bottom = y + view.getHeight();
-//                    right = x + view.getWidth();
-                    Log.d(TAG, "横线");
-                } else if (viewInfo.degree == 90 || viewInfo.degree == 270) {
-//                    right = x + view.getWidth();
-//                    bottom = view.getHeight();
-                    Log.d(TAG, "竖线");
-                } else {
-//                    right = x + view.getWidth();
-//                    bottom = y + view.getHeight();
-                    Log.d(TAG, "其他");
-                }
 
                 mLefts.add(x);
                 mTops.add(y);
@@ -1272,8 +1207,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         Bitmap cacheBmp = mContent.getDrawingCache();
         Bitmap resultBmp = null;
         if (null != cacheBmp) {
-            int width = (int) (mContent.getWidth() * 1);
-            int height = (int) (mContent.getHeight() * 1);
+            int width = mContent.getWidth();
+            int height = mContent.getHeight();
             resultBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(resultBmp);
             Rect srcRect = new Rect();
